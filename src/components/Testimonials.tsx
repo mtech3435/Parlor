@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, Building } from 'lucide-react';
 
 const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const testimonials = [
     {
@@ -43,12 +44,33 @@ const Testimonials: React.FC = () => {
     }
   ];
 
+  // Auto-advance carousel
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, testimonials.length]);
+
+  // Pause auto-play on hover
+  const handleMouseEnter = () => setIsAutoPlaying(false);
+  const handleMouseLeave = () => setIsAutoPlaying(true);
+
   const nextTestimonial = () => {
+    setIsAutoPlaying(false); // Stop auto-play when user manually navigates
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    // Resume auto-play after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   const prevTestimonial = () => {
+    setIsAutoPlaying(false); // Stop auto-play when user manually navigates
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    // Resume auto-play after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   return (
@@ -65,7 +87,11 @@ const Testimonials: React.FC = () => {
 
         <div className="relative max-w-4xl mx-auto">
           {/* Testimonial Card */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center relative overflow-hidden">
+          <div 
+            className="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center relative overflow-hidden"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             {/* Background Pattern */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-100 to-red-200 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-100 to-blue-200 rounded-full translate-y-12 -translate-x-12 opacity-50"></div>
@@ -130,12 +156,24 @@ const Testimonials: React.FC = () => {
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setIsAutoPlaying(false);
+                  setTimeout(() => setIsAutoPlaying(true), 10000);
+                }}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex ? 'bg-red-500 w-8' : 'bg-gray-300 hover:bg-gray-400'
                 }`}
               />
             ))}
+          </div>
+        </div>
+
+        {/* Auto-play indicator */}
+        <div className="text-center mt-4">
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+            <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+            <span>{isAutoPlaying ? 'Auto-playing' : 'Paused'}</span>
           </div>
         </div>
 

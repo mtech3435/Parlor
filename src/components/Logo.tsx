@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 interface LogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -11,6 +13,8 @@ const Logo: React.FC<LogoProps> = ({
   size = 'md', 
   variant = 'full' 
 }) => {
+  const navigate = useNavigate();
+
   const sizeClasses = {
     sm: 'h-8',
     md: 'h-10',
@@ -106,7 +110,10 @@ const Logo: React.FC<LogoProps> = ({
   }
 
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
+    <div 
+      className={`flex items-center space-x-3 cursor-pointer ${className}`}
+      onClick={() => navigate('/')}
+    >
       <LogoIcon />
       <LogoText textSize={size === 'sm' ? 'text-lg' : size === 'lg' ? 'text-2xl' : size === 'xl' ? 'text-3xl' : 'text-xl'} />
     </div>

@@ -30,10 +30,21 @@ const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Home</a>
+            <a href="/" className="text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Home</a>
             <a href="/properties" className="text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Properties</a>
             <a href="/about" className="text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">About</a>
-            <a href="#contact" className="text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Contact</a>
+            <a 
+              href="/#contact" 
+              onClick={(e) => {
+                if (window.location.pathname === '/') {
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium"
+            >
+              Contact
+            </a>
           </nav>
 
           {/* Desktop Actions */}
@@ -101,10 +112,22 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <a href="#home" className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Home</a>
+            <a href="/" className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Home</a>
             <a href="/properties" className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Properties</a>
             <a href="/about" className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">About</a>
-            <a href="#contact" className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium">Contact</a>
+            <a 
+              href="/#contact"
+              onClick={(e) => {
+                if (window.location.pathname === '/') {
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }
+                setIsMenuOpen(false);
+              }}
+              className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-300 font-medium"
+            >
+              Contact
+            </a>
             
             {user ? (
               <div className="border-t border-gray-200 pt-2 mt-2">
